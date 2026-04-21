@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Cotton Costing App</title>
+
+<!-- ✅ IMPORTANT (PWABuilder fix) -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
 
 <style>
 body{font-family:sans-serif;background:#eef2f7;margin:0}
@@ -85,9 +90,8 @@ font-weight:bold;
 <div class="row">Warp / Takha <span id="warpTakha">0</span></div>
 </div>
 
-<!-- WhatsApp Section -->
 <div class="card">
-<div class="row">Mobile No <input type="number" inputmode="numeric" id="mobile" placeholder="923XXXXXXXXX"></div>
+<div class="row">Mobile No <input type="number" inputmode="numeric" id="mobile"></div>
 <button onclick="shareWhatsApp()">📲 Share on WhatsApp</button>
 </div>
 
@@ -117,28 +121,22 @@ let takha=+takhaEl.value||1;
 let saleRate=+saleRateEl.value||0;
 let kanji=+kanjiEl.value||0;
 
-/* TAKHA */
 let weftTakha=(pick*width*tape)/1850/weftCount;
 let warpTakha=(taar*tape)/1850/warpCount;
 
-/* COST */
 let cost=((weftTakha*weftRate)+(warpTakha*warpRate))/takha/4.166;
 
-/* QUALITY */
 let qm=(weftTakha+warpTakha)/takha;
 let qg=qm+(kanji/140);
 
-/* PROFIT */
 let profit=(saleRate+(saleRate*0.05))-cost;
 
-/* LABEL CHANGE */
 if(profit < 0){
 profitLabel.innerText = "Loss";
 } else {
 profitLabel.innerText = "Profit";
 }
 
-/* POPUP when profit positive */
 if(profit > 0 && !lastProfitPositive){
 alert("شکر الحمداللہ");
 lastProfitPositive = true;
@@ -148,7 +146,6 @@ if(profit <= 0){
 lastProfitPositive = false;
 }
 
-/* OUTPUT */
 rateEl.innerText=cost.toFixed(2);
 profitEl.innerText=Math.abs(profit).toFixed(2);
 qmEl.innerText=qm.toFixed(3);
@@ -158,7 +155,6 @@ warpTakhaEl.innerText=warpTakha.toFixed(2);
 
 }
 
-/* WhatsApp Share */
 function shareWhatsApp(){
 
 let mobile = mobileEl.value;
@@ -169,23 +165,9 @@ return;
 }
 
 let msg =
-"🧵 Cotton Costing\n\n"+
-"Taar: "+taarEl.value+"\n"+
-"T.L: "+tapeEl.value+"\n"+
-"Pick: "+pickEl.value+"\n"+
-"Rundi: "+rundiEl.value+"\n\n"+
-
-"Weft Rate: "+weftRateEl.value+"\n"+
-"Warp Rate: "+warpRateEl.value+"\n"+
-"Labour: "+labourEl.value+"\n"+
-"Sizing: "+sizingEl.value+"\n\n"+
-
+"Cotton Costing\n\n"+
 "Cost/Meter: ₹ "+rateEl.innerText+"\n"+
-"Sale Rate: ₹ "+saleRateEl.value+"\n"+
-profitLabel.innerText+": ₹ "+profitEl.innerText+"\n\n"+
-
-"Quality/Meter: "+qmEl.innerText+"\n"+
-"Quality/Gram: "+qgEl.innerText;
+profitLabel.innerText+": ₹ "+profitEl.innerText;
 
 let url="https://wa.me/"+mobile+"?text="+encodeURIComponent(msg);
 
@@ -193,7 +175,6 @@ window.open(url,'_blank');
 
 }
 
-/* ELEMENTS */
 const taarEl=taar,tapeEl=tape,pickEl=pick,rundiEl=rundi;
 const weftCountEl=weftCount,warpCountEl=warpCount;
 const weftRateEl=weftRate,warpRateEl=warpRate;
@@ -207,6 +188,11 @@ const profitLabel=document.getElementById("profitLabel");
 document.querySelectorAll("input").forEach(i=>i.addEventListener("input",calc));
 
 calc();
+
+/* ✅ Service Worker */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
+}
 
 </script>
 
