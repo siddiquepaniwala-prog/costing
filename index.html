@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotton Costing App</title>
+
+<style>
+body{font-family:sans-serif;background:#eef2f7;margin:0}
+
+.header{
+    text-align:center;
+    background: linear-gradient(135deg,#000,#333);
+    color:#fff;
+    padding:10px;
+    font-size:15px;
+    font-weight:bold;
+}
+
+.container{max-width:500px;margin:auto;padding:15px}
+
+.card{background:#fff;padding:15px;border-radius:12px;margin-bottom:12px}
+
+.row{display:flex;justify-content:space-between;margin-bottom:10px}
+
+input{
+width:110px;
+text-align:right;
+padding:5px;
+}
+
+.highlight{padding:12px;border-radius:10px;text-align:center;font-weight:bold}
+
+.green{background:#c8e6c9}
+.yellow{background:#ffc107}
+
+button{
+width:100%;
+padding:10px;
+background:#25D366;
+color:#fff;
+border:none;
+border-radius:8px;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">COSTING by SIDDIQUE PANIWALA</div>
+
+<div class="container">
+
+<div class="card">
+<div class="row">Taar <input type="number" inputmode="decimal" id="taar"></div>
+<div class="row">T.L <input type="number" inputmode="decimal" id="tape"></div>
+<div class="row">Pick <input type="number" inputmode="decimal" id="pick"></div>
+<div class="row">Rundi <input type="number" inputmode="decimal" id="rundi"></div>
+<div class="row">Weft Count <input type="number" inputmode="decimal" id="weftCount"></div>
+<div class="row">Warp Count <input type="number" inputmode="decimal" id="warpCount"></div>
+</div>
+
+<div class="card">
+<div class="row">Warp Rate <input type="number" inputmode="decimal" id="warpRate"></div>
+<div class="row">Weft Rate <input type="number" inputmode="decimal" id="weftRate"></div>
+<div class="row">Labour <input type="number" inputmode="decimal" id="labour"></div>
+<div class="row">Sizing <input type="number" inputmode="decimal" id="sizing"></div>
+<div class="row">Takha Meter <input type="number" inputmode="decimal" id="takha"></div>
+</div>
+
+<div class="highlight green">Cost / Meter ₹ <span id="rate">0</span></div>
+
+<div class="card">
+<div class="row">Sale Rate <input type="number" inputmode="decimal" id="saleRate"></div>
+</div>
+
+<div class="highlight yellow"><span id="profitLabel">Profit</span> ₹ <span id="profit">0</span></div>
+
+<div class="card">
+<div class="row">Quality / Meter <span id="qm">0</span></div>
+<div class="row">Kanji <input type="number" inputmode="decimal" id="kanji"></div>
+<div class="row">Quality / Gram <span id="qg">0</span></div>
+<div class="row">Weft / Takha <span id="weftTakha">0</span></div>
+<div class="row">Warp / Takha <span id="warpTakha">0</span></div>
+</div>
+
+<!-- WhatsApp Section -->
+<div class="card">
+<div class="row">Mobile No <input type="number" inputmode="numeric" id="mobile" placeholder="923XXXXXXXXX"></div>
+<button onclick="shareWhatsApp()">📲 Share on WhatsApp</button>
+</div>
+
+</div>
+
+<script>
+
+let lastProfitPositive = false;
+
+function calc(){
+
+let taar=+taarEl.value||0;
+let tape=+tapeEl.value||0;
+let pick=+pickEl.value||0;
+let width=+rundiEl.value||0;
+
+let weftCount=+weftCountEl.value||1;
+let warpCount=+warpCountEl.value||1;
+
+let weftRate=+weftRateEl.value||0;
+let warpRate=+warpRateEl.value||0;
+
+let labour=+labourEl.value||0;
+let sizing=+sizingEl.value||0;
+let takha=+takhaEl.value||1;
+
+let saleRate=+saleRateEl.value||0;
+let kanji=+kanjiEl.value||0;
+
+/* TAKHA */
+let weftTakha=(pick*width*tape)/1850/weftCount;
+let warpTakha=(taar*tape)/1850/warpCount;
+
+/* COST */
+let cost=((weftTakha*weftRate)+(warpTakha*warpRate))/takha/4.166;
+
+/* QUALITY */
+let qm=(weftTakha+warpTakha)/takha;
+let qg=qm+(kanji/140);
+
+/* PROFIT */
+let profit=(saleRate+(saleRate*0.05))-cost;
+
+/* LABEL CHANGE */
+if(profit < 0){
+profitLabel.innerText = "Loss";
+} else {
+profitLabel.innerText = "Profit";
+}
+
+/* POPUP when profit positive */
+if(profit > 0 && !lastProfitPositive){
+alert("شکر الحمداللہ");
+lastProfitPositive = true;
+}
+
+if(profit <= 0){
+lastProfitPositive = false;
+}
+
+/* OUTPUT */
+rateEl.innerText=cost.toFixed(2);
+profitEl.innerText=Math.abs(profit).toFixed(2);
+qmEl.innerText=qm.toFixed(3);
+qgEl.innerText=qg.toFixed(3);
+weftTakhaEl.innerText=weftTakha.toFixed(2);
+warpTakhaEl.innerText=warpTakha.toFixed(2);
+
+}
+
+/* WhatsApp Share */
+function shareWhatsApp(){
+
+let mobile = mobileEl.value;
+
+if(!mobile){
+alert("Mobile number daalein");
+return;
+}
+
+let msg =
+"🧵 Cotton Costing\n\n"+
+"Taar: "+taarEl.value+"\n"+
+"T.L: "+tapeEl.value+"\n"+
+"Pick: "+pickEl.value+"\n"+
+"Rundi: "+rundiEl.value+"\n\n"+
+
+"Weft Rate: "+weftRateEl.value+"\n"+
+"Warp Rate: "+warpRateEl.value+"\n"+
+"Labour: "+labourEl.value+"\n"+
+"Sizing: "+sizingEl.value+"\n\n"+
+
+"Cost/Meter: ₹ "+rateEl.innerText+"\n"+
+"Sale Rate: ₹ "+saleRateEl.value+"\n"+
+profitLabel.innerText+": ₹ "+profitEl.innerText+"\n\n"+
+
+"Quality/Meter: "+qmEl.innerText+"\n"+
+"Quality/Gram: "+qgEl.innerText;
+
+let url="https://wa.me/"+mobile+"?text="+encodeURIComponent(msg);
+
+window.open(url,'_blank');
+
+}
+
+/* ELEMENTS */
+const taarEl=taar,tapeEl=tape,pickEl=pick,rundiEl=rundi;
+const weftCountEl=weftCount,warpCountEl=warpCount;
+const weftRateEl=weftRate,warpRateEl=warpRate;
+const labourEl=labour,sizingEl=sizing,takhaEl=takha;
+const saleRateEl=saleRate,kanjiEl=kanji,mobileEl=mobile;
+
+const rateEl=rate,profitEl=profit,qmEl=qm,qgEl=qg;
+const weftTakhaEl=weftTakha,warpTakhaEl=warpTakha;
+const profitLabel=document.getElementById("profitLabel");
+
+document.querySelectorAll("input").forEach(i=>i.addEventListener("input",calc));
+
+calc();
+
+</script>
+
+</body>
+</html>
