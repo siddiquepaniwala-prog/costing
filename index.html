@@ -3,195 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotton Costing Pro</title>
 
-<title>Cotton Costing App</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-<!-- ✅ IMPORTANT (PWABuilder fix) -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-body{font-family:sans-serif;background:#eef2f7;margin:0}
+body{margin:0;font-family:'Poppins';background:#f5f5f5;padding:15px;}
+.container{max-width:420px;margin:auto;}
+.title{font-size:26px;font-weight:600;}
+.sub{color:#ff7a00;font-size:13px;font-weight:600;}
+.desc{font-size:13px;color:#777;margin-bottom:15px;}
 
-.header{
-    text-align:center;
-    background: linear-gradient(135deg,#000,#333);
-    color:#fff;
-    padding:10px;
-    font-size:15px;
-    font-weight:bold;
-}
+.card{background:#fff;border-radius:18px;padding:15px;margin-bottom:15px;box-shadow:0 5px 20px rgba(0,0,0,0.05);}
+.card-title{font-weight:600;font-size:14px;margin-bottom:10px;}
+.row{display:flex;gap:10px;margin-bottom:10px;}
+.group{flex:1;}
+label{font-size:11px;color:#777;}
+input{width:100%;padding:12px;border-radius:12px;border:1px solid #e5e5e5;margin-top:5px;font-size:16px;background:#fafafa;}
 
-.container{max-width:500px;margin:auto;padding:15px}
+.btn{width:100%;padding:14px;border:none;border-radius:14px;background:#ff7a00;color:#fff;font-size:16px;font-weight:600;margin-top:10px;}
+.share{width:100%;padding:14px;border:none;border-radius:14px;background:#1f2b3a;color:#fff;font-size:16px;margin-top:10px;}
 
-.card{background:#fff;padding:15px;border-radius:12px;margin-bottom:12px}
-
-.row{display:flex;justify-content:space-between;margin-bottom:10px}
-
-input{
-width:110px;
-text-align:right;
-padding:5px;
-}
-
-.highlight{padding:12px;border-radius:10px;text-align:center;font-weight:bold}
-
-.green{background:#c8e6c9}
-.yellow{background:#ffc107}
-
-button{
-width:100%;
-padding:10px;
-background:#25D366;
-color:#fff;
-border:none;
-border-radius:8px;
-font-weight:bold;
-}
+.result{background:#1f2b3a;color:#fff;border-radius:16px;padding:15px;display:flex;justify-content:space-between;margin-top:10px;}
+.result h4{font-size:12px;color:#aaa;}
+.value{font-size:22px;font-weight:600;}
+.green{color:#00d084;}
 </style>
 </head>
 
 <body>
 
-<div class="header">COSTING by SIDDIQUE PANIWALA</div>
+<div class="container" id="report">
 
-<div class="container">
+<div class="title">Cotton Costing Pro</div>
+<div class="sub">BY SIDDIQUE PANIWALA</div>
+<div class="desc">Textile cost & profit calculator</div>
 
 <div class="card">
-<div class="row">Taar <input type="number" inputmode="decimal" id="taar"></div>
-<div class="row">T.L <input type="number" inputmode="decimal" id="tape"></div>
-<div class="row">Pick <input type="number" inputmode="decimal" id="pick"></div>
-<div class="row">Rundi <input type="number" inputmode="decimal" id="rundi"></div>
-<div class="row">Weft Count <input type="number" inputmode="decimal" id="weftCount"></div>
-<div class="row">Warp Count <input type="number" inputmode="decimal" id="warpCount"></div>
+<div class="card-title">YARN DETAILS</div>
+<div class="row">
+<input id="taar" placeholder="Taar">
+<input id="length" placeholder="T.L">
+</div>
+<div class="row">
+<input id="pick" placeholder="Pick">
+<input id="width" placeholder="Rundi">
+</div>
 </div>
 
 <div class="card">
-<div class="row">Warp Rate <input type="number" inputmode="decimal" id="warpRate"></div>
-<div class="row">Weft Rate <input type="number" inputmode="decimal" id="weftRate"></div>
-<div class="row">Labour <input type="number" inputmode="decimal" id="labour"></div>
-<div class="row">Sizing <input type="number" inputmode="decimal" id="sizing"></div>
-<div class="row">Takha Meter <input type="number" inputmode="decimal" id="takha"></div>
+<div class="card-title">COUNTS</div>
+<div class="row">
+<input id="weftCount" placeholder="Weft Count">
+<input id="warpCount" placeholder="Warp Count">
 </div>
-
-<div class="highlight green">Cost / Meter ₹ <span id="rate">0</span></div>
-
-<div class="card">
-<div class="row">Sale Rate <input type="number" inputmode="decimal" id="saleRate"></div>
-</div>
-
-<div class="highlight yellow"><span id="profitLabel">Profit</span> ₹ <span id="profit">0</span></div>
-
-<div class="card">
-<div class="row">Quality / Meter <span id="qm">0</span></div>
-<div class="row">Kanji <input type="number" inputmode="decimal" id="kanji"></div>
-<div class="row">Quality / Gram <span id="qg">0</span></div>
-<div class="row">Weft / Takha <span id="weftTakha">0</span></div>
-<div class="row">Warp / Takha <span id="warpTakha">0</span></div>
 </div>
 
 <div class="card">
-<div class="row">Mobile No <input type="number" inputmode="numeric" id="mobile"></div>
-<button onclick="shareWhatsApp()">📲 Share on WhatsApp</button>
+<div class="card-title">RATES</div>
+<div class="row">
+<input id="weftRate" placeholder="Weft Rate">
+<input id="warpRate" placeholder="Warp Rate">
+</div>
+<input id="saleRate" placeholder="Sale Rate">
+</div>
+
+<div class="card">
+<div class="card-title">COSTS</div>
+<div class="row">
+<input id="labour" placeholder="Labour">
+<input id="sizing" placeholder="Sizing">
+</div>
+<input id="meter" placeholder="Takha Meter">
+</div>
+
+<button class="btn" onclick="calc()">Calculate</button>
+<button class="share" onclick="shareData()">Share Result</button>
+
+<div class="result">
+<div>
+<h4>COST / METER</h4>
+<div id="cost" class="value">0</div>
+</div>
+<div>
+<h4>PROFIT</h4>
+<div id="profit" class="value green">0</div>
+</div>
 </div>
 
 </div>
 
 <script>
 
-let lastProfitPositive = false;
+function v(id){return parseFloat(document.getElementById(id).value)||0;}
 
 function calc(){
+let weftTakha=(v("pick")*v("width")*v("length"))/1850/v("weftCount");
+let warpTakha=(v("taar")*v("length"))/1850/v("warpCount");
 
-let taar=+taarEl.value||0;
-let tape=+tapeEl.value||0;
-let pick=+pickEl.value||0;
-let width=+rundiEl.value||0;
+let cost=((weftTakha*v("weftRate")/5)+(warpTakha*v("warpRate")/5)+v("labour")+(warpTakha*v("sizing")))/v("meter");
+let profit=(v("saleRate")+(v("saleRate")*0.05))-cost;
 
-let weftCount=+weftCountEl.value||1;
-let warpCount=+warpCountEl.value||1;
-
-let weftRate=+weftRateEl.value||0;
-let warpRate=+warpRateEl.value||0;
-
-let labour=+labourEl.value||0;
-let sizing=+sizingEl.value||0;
-let takha=+takhaEl.value||1;
-
-let saleRate=+saleRateEl.value||0;
-let kanji=+kanjiEl.value||0;
-
-let weftTakha=(pick*width*tape)/1850/weftCount;
-let warpTakha=(taar*tape)/1850/warpCount;
-
-let cost=((weftTakha*weftRate)+(warpTakha*warpRate))/takha/4.166;
-
-let qm=(weftTakha+warpTakha)/takha;
-let qg=qm+(kanji/140);
-
-let profit=(saleRate+(saleRate*0.05))-cost;
-
-if(profit < 0){
-profitLabel.innerText = "Loss";
-} else {
-profitLabel.innerText = "Profit";
+document.getElementById("cost").innerText=cost.toFixed(2);
+document.getElementById("profit").innerText=profit.toFixed(2);
 }
 
-if(profit > 0 && !lastProfitPositive){
-alert("شکر الحمداللہ");
-lastProfitPositive = true;
-}
+// SHARE FUNCTION
+function shareData(){
 
-if(profit <= 0){
-lastProfitPositive = false;
-}
+let text = `
+Cotton Costing Report
 
-rateEl.innerText=cost.toFixed(2);
-profitEl.innerText=Math.abs(profit).toFixed(2);
-qmEl.innerText=qm.toFixed(3);
-qgEl.innerText=qg.toFixed(3);
-weftTakhaEl.innerText=weftTakha.toFixed(2);
-warpTakhaEl.innerText=warpTakha.toFixed(2);
+Cost/Meter: ${document.getElementById("cost").innerText}
+Profit: ${document.getElementById("profit").innerText}
+Sale Rate: ${v("saleRate")}
 
-}
+Taar: ${v("taar")}
+Pick: ${v("pick")}
+Width: ${v("width")}
+`;
 
-function shareWhatsApp(){
 
-let mobile = mobileEl.value;
+// WhatsApp
+window.open("https://wa.me/?text="+encodeURIComponent(text));
 
-if(!mobile){
-alert("Mobile number daalein");
-return;
-}
+// SMS fallback
+window.location.href = "sms:?body="+encodeURIComponent(text);
 
-let msg =
-"Cotton Costing\n\n"+
-"Cost/Meter: ₹ "+rateEl.innerText+"\n"+
-profitLabel.innerText+": ₹ "+profitEl.innerText;
+// PDF
+html2pdf().from(document.getElementById("report")).save("Costing_Report.pdf");
 
-let url="https://wa.me/"+mobile+"?text="+encodeURIComponent(msg);
-
-window.open(url,'_blank');
-
-}
-
-const taarEl=taar,tapeEl=tape,pickEl=pick,rundiEl=rundi;
-const weftCountEl=weftCount,warpCountEl=warpCount;
-const weftRateEl=weftRate,warpRateEl=warpRate;
-const labourEl=labour,sizingEl=sizing,takhaEl=takha;
-const saleRateEl=saleRate,kanjiEl=kanji,mobileEl=mobile;
-
-const rateEl=rate,profitEl=profit,qmEl=qm,qgEl=qg;
-const weftTakhaEl=weftTakha,warpTakhaEl=warpTakha;
-const profitLabel=document.getElementById("profitLabel");
-
-document.querySelectorAll("input").forEach(i=>i.addEventListener("input",calc));
-
-calc();
-
-/* ✅ Service Worker */
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
 }
 
 </script>
