@@ -1,9 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- 🔥 UPDATED VIEWPORT -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
 <title>Cotton Costing Pro</title>
+
+<!-- 🔥 PWA + iPHONE PREMIUM -->
+<meta name="theme-color" content="#0f172a">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cotton Costing">
+
+<link rel="apple-touch-icon" href="icon512.png">
+<link rel="manifest" href="manifest.json">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Noto+Naskh+Arabic:wght@600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -97,15 +111,14 @@ input[type=number]{ -moz-appearance:textfield; }
   text-shadow:0 0 10px #22c55e,0 0 30px #22c55e;
 }
 
-/* 🔥 PDF MODE (ONLY DURING EXPORT) */
+/* PDF MODE */
 .pdf-mode input{
   background:#ffffff !important;
   color:#000000 !important;
   font-weight:700 !important;
-  border:1px solid #888 !important; /* 🔥 UPDATED GREY BORDER */
+  border:1px solid #888 !important;
 }
 
-/* 🔥 REMOVE NAME IN PDF */
 .pdf-mode .sub{
   display:none !important;
 }
@@ -202,27 +215,17 @@ if(profit<0){
 }
 
 function shareData(){
-
 let element=document.getElementById("report");
-
 element.classList.add("pdf-mode");
 
 html2pdf().set({
 margin:5,
 filename:'Costing_Report.pdf',
-html2canvas:{
-  scale:4,
-  scrollY:0
-},
-jsPDF:{
-  unit:'mm',
-  format:'a4',
-  orientation:'portrait'
-}
+html2canvas:{ scale:4, scrollY:0 },
+jsPDF:{ unit:'mm', format:'a4', orientation:'portrait' }
 }).from(element).save().then(()=>{
 element.classList.remove("pdf-mode");
 });
-
 }
 </script>
 
