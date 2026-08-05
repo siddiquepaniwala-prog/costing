@@ -1,23 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
-<!-- 🔥 UPDATED VIEWPORT -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cotton Costing Pro</title>
-
-<!-- 🔥 PWA + iPHONE PREMIUM -->
-<meta name="theme-color" content="#0f172a">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Cotton Costing">
-
-<link rel="apple-touch-icon" href="icon512.png">
-<link rel="manifest" href="manifest.json">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Noto+Naskh+Arabic:wght@600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -111,14 +97,15 @@ input[type=number]{ -moz-appearance:textfield; }
   text-shadow:0 0 10px #22c55e,0 0 30px #22c55e;
 }
 
-/* PDF MODE */
+/* 🔥 PDF MODE (ONLY DURING EXPORT) */
 .pdf-mode input{
   background:#ffffff !important;
   color:#000000 !important;
   font-weight:700 !important;
-  border:1px solid #888 !important;
+  border:1px solid #888 !important; /* 🔥 UPDATED GREY BORDER */
 }
 
+/* 🔥 REMOVE NAME IN PDF */
 .pdf-mode .sub{
   display:none !important;
 }
@@ -175,6 +162,15 @@ input[type=number]{ -moz-appearance:textfield; }
 <input type="number" id="meter">
 </div>
 
+
+<div class="card">
+<div class="card-title">QUALITY DETAILS</div>
+<div class="row">
+<div style="flex:1"><label>Kanji</label><input type="number" id="kanji"></div>
+</div>
+<div class="result"><div>Quality / Meter: <span id="qm">0.000</span></div><div>Quality / Gram: <span id="qg">0.000</span></div></div>
+<div class="result"><div>Weft / Takha: <span id="weftTakha">0.00</span></div><div>Warp / Takha: <span id="warpTakha">0.00</span></div></div>
+</div>
 <button class="btn" onclick="calc()">Calculate</button>
 <button class="share" onclick="shareData()">Share Result</button>
 
@@ -194,6 +190,13 @@ let warpTakha=(v("taar")*v("length"))/1850/v("warpCount");
 
 let cost=((weftTakha*v("weftRate")/5)+(warpTakha*v("warpRate")/5)+v("labour")+(warpTakha*v("sizing")))/v("meter");
 let profit=(v("saleRate")+(v("saleRate")*0.05))-cost;
+let qm=v("meter")?((weftTakha+warpTakha)/v("meter")):0;
+let qg=qm+(v("kanji")/140);
+document.getElementById("qm").innerText=qm.toFixed(3);
+document.getElementById("qg").innerText=qg.toFixed(3);
+document.getElementById("weftTakha").innerText=weftTakha.toFixed(3);
+document.getElementById("warpTakha").innerText=warpTakha.toFixed(3);
+
 
 document.getElementById("cost").innerText=cost.toFixed(2);
 
@@ -215,17 +218,27 @@ if(profit<0){
 }
 
 function shareData(){
+
 let element=document.getElementById("report");
+
 element.classList.add("pdf-mode");
 
 html2pdf().set({
 margin:5,
 filename:'Costing_Report.pdf',
-html2canvas:{ scale:4, scrollY:0 },
-jsPDF:{ unit:'mm', format:'a4', orientation:'portrait' }
+html2canvas:{
+  scale:4,
+  scrollY:0
+},
+jsPDF:{
+  unit:'mm',
+  format:'a4',
+  orientation:'portrait'
+}
 }).from(element).save().then(()=>{
 element.classList.remove("pdf-mode");
 });
+
 }
 </script>
 
